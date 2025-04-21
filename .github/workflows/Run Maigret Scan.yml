@@ -11,6 +11,7 @@ on:
 jobs:
   maigret:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -20,17 +21,24 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install dependencies
+      - name: Downgrade pip (fix Maigret install issue)
         run: |
-          python -m pip install --upgrade pip
-          pip install maigret
+          python -m pip install --upgrade pip==23.3.1
+
+      - name: Install fixed version of arabic-reshaper (manual fix)
+        run: |
+          pip install arabic-reshaper==2.1.1
+
+      - name: Install Maigret (older stable version)
+        run: |
+          pip install maigret==0.4.0
 
       - name: Run Maigret scan
         run: |
           mkdir output
           maigret "${{ github.event.inputs.username }}" -o output/result.html
 
-      - name: Upload artifact (HTML report)
+      - name: Upload report as artifact
         uses: actions/upload-artifact@v4
         with:
           name: maigret-report
