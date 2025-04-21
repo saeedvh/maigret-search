@@ -13,26 +13,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Install safe pip and Maigret
+      - name: Install pip and Maigret
         run: |
           pip install --upgrade pip==23.3.1
           pip install maigret --no-deps
 
-      - name: Run Maigret (HTML Output)
+      - name: Run Maigret and show output
         run: |
-          mkdir -p output
-          maigret "${{ github.event.inputs.username }}" -o output || true
-
-      - name: Upload result as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: maigret-html-report
-          path: output/maigret_report.html
+          maigret "${{ github.event.inputs.username }}"
