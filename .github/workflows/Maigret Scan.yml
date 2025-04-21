@@ -23,6 +23,6 @@ jobs:
           pip install --upgrade pip==23.3.1
           pip install maigret
 
-      - name: Run Maigret and show output
+      - name: Run Maigret with full output
         run: |
-          maigret "${{ github.event.inputs.username }}"
+          maigret "${{ github.event.inputs.username }}" --all --verbose -n
