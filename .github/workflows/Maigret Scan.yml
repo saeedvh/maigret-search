@@ -18,10 +18,10 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install pip and Maigret
+      - name: Install Maigret
         run: |
           pip install --upgrade pip==23.3.1
-          pip install maigret --no-deps
+          pip install maigret
 
       - name: Run Maigret and show output
         run: |
