@@ -25,4 +25,4 @@ jobs:
 
       - name: Run Maigret with full output
         run: |
-          maigret "${{ github.event.inputs.username }}" --all --verbose -n
+          maigret "${{ github.event.inputs.username }}" --all --verbose -n 10
