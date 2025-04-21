@@ -1,33 +1,37 @@
-name: Maigret Search Workflow
+name: Run Maigret Scan
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
+    inputs:
+      username:
+        description: 'Username to search'
+        required: true
+        type: string
 
 jobs:
   maigret:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Install dependencies
-      run: |
-        sudo apt update
-        sudo apt install -y python3-pip python3-dev python3-setuptools
-        python3 -m pip install --upgrade pip
-        pip install maigret
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-    - name: Run Maigret
-      run: |
-        mkdir -p output
-        maigret najlamsv -a --output output/results.html
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install maigret
 
-    - name: Upload results
-      uses: actions/upload-artifact@v3
-      with:
-        name: maigret-results
-        path: output/results.html
+      - name: Run Maigret scan
+        run: |
+          mkdir output
+          maigret "${{ github.event.inputs.username }}" -o output/result.html
+
+      - name: Upload artifact (HTML report)
+        uses: actions/upload-artifact@v4
+        with:
+          name: maigret-report
+          path: output/result.html
