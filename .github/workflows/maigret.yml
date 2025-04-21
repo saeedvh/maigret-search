@@ -1,0 +1,31 @@
+name: Run Maigret Search
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  maigret-search:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y python3-pip python3-venv
+        pip install maigret
+
+    - name: Run Maigret
+      run: |
+        maigret najlamsv -a --print-errors > result.txt
+
+    - name: Upload results
+      uses: actions/upload-artifact@v2
+      with:
+        name: maigret-results
+        path: result.txt
